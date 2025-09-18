@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Centre Query Interface (Fullstack)</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-theme="dark">
+  <div class="container">
+    <header class="header">
+      <h1>🏥 Health Centre Query Interface (Fullstack)</h1>
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">☀️</span>
+        <span id="theme-text">Light Mode</span>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <div class="panel">
+        <h2>📊 Patient Data Upload</h2>
+        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+          <p>📋 Drop or choose Excel/CSV file</p>
+          <p style="color: var(--text-secondary)">Upload patient records in .xlsx or .csv format</p>
+          <button class="upload-btn">Choose File</button>
+        </div>
+        <input type="file" id="fileInput" class="file-input" accept=".xlsx,.xls,.csv">
+
+        <div class="quick-actions">
+          <div class="quick-btn" onclick="loadSample()">📋 Load Sample Data</div>
+          <div class="quick-btn" onclick="clearClientData()">🗑️ Clear Client View</div>
+          <div class="quick-btn" onclick="clearServerData()">🗑️ Clear Server Data</div>
+          <div class="quick-btn" onclick="exportClientData()">📤 Export Results</div>
+        </div>
+
+        <div id="dataInfo" class="data-info" style="display:none;"></div>
+
+        <!-- ✅ Dropdown Queries -->
+        <div class="sample-queries">
+          <h3>📌 Sample Queries</h3>
+
+          <details class="query-category">
+            <summary>📋 SELECT Queries</summary>
+            <div class="sample-query" onclick="setQuery('SELECT * FROM patients LIMIT 20;')">
+              SELECT * FROM patients LIMIT 20;
+            </div>
+            <div class="sample-query" onclick="setQuery('SELECT name, age, department, diagnosis FROM patients WHERE age > 40;')">
+              SELECT name, age, department, diagnosis FROM patients WHERE age > 40;
+            </div>
+            <div class="sample-query" onclick="setQuery('SELECT COUNT(*) as total_patients FROM patients;')">
+              SELECT COUNT(*) as total_patients FROM patients;
+            </div>
+            <div class="sample-query" onclick="setQuery('SELECT DISTINCT department FROM patients ORDER BY department;')">
+              SELECT DISTINCT department FROM patients ORDER BY department;
+            </div>
+            <div class="sample-query" onclick="setQuery('SELECT department, COUNT(*) as patient_count, AVG(cost) as avg_cost FROM patients GROUP BY department;')">
+              SELECT department, COUNT(*) as patient_count, AVG(cost) as avg_cost FROM patients GROUP BY department;
+            </div>
+          </details>
+
+          <details class="query-category">
+            <summary>➕ INSERT Queries</summary>
+            <div class="sample-query" onclick="setQuery(`INSERT INTO patients (Name, Age, Gender, Department, Diagnosis, Treatment, Doctor, Cost) VALUES ('John Doe', 35, 'Male', 'Cardiology', 'Hypertension', 'Medication', 'Dr. Smith', 5000);`)">
+              INSERT INTO patients (...) VALUES (...);
+            </div>
+          </details>
+
+          <details class="query-category">
+            <summary>✏ UPDATE Queries</summary>
+            <div class="sample-query" onclick="setQuery('UPDATE patients SET Cost = Cost * 1.1 WHERE Department = \'Surgery\';')">
+              UPDATE patients SET Cost = Cost * 1.1 WHERE Department = 'Surgery';
+            </div>
+          </details>
+
+          <details class="query-category">
+            <summary>🗑 DELETE Queries</summary>
+            <div class="sample-query" onclick="setQuery('DELETE FROM patients WHERE Age > 100;')">
+              DELETE FROM patients WHERE Age > 100;
+            </div>
+          </details>
+
+          <details class="query-category">
+            <summary>📊 Advanced Queries</summary>
+            <div class="sample-query" onclick="setQuery('SELECT doctor, COUNT(*) as patients, SUM(cost) as total_revenue FROM patients GROUP BY doctor HAVING COUNT(*) > 2;')">
+              SELECT doctor, COUNT(*) as patients, SUM(cost) as total_revenue ...
+            </div>
+            <div class="sample-query" onclick="setQuery('SELECT * FROM patients WHERE cost > (SELECT AVG(cost) FROM patients);')">
+              SELECT * FROM patients WHERE cost > (SELECT AVG(cost) FROM patients);
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>💻 SQL Query Editor</h2>
+        <textarea id="queryInput" class="query-input" placeholder="Enter your SQL query here..."></textarea>
+        <button class="execute-btn" onclick="executeQuery()" id="executeBtn">⚡ Execute Query</button>
+      </div>
+    </div>
+
+    <div class="results-container">
+      <div class="results-header">
+        <h2>🔍 Query Results</h2>
+        <div class="results-stats" id="resultsStats">Ready to execute queries</div>
+      </div>
+      <div id="resultsArea">
+        <div class="message info">
+          <span>🏥</span>
+          <span>Welcome to Health Centre Query Interface! Upload patient data or load sample data to begin.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="js/client.js"></script>
+</body>
+</html>
